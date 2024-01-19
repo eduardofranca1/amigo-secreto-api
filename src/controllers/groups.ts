@@ -1,7 +1,29 @@
 import { RequestHandler } from "express-serve-static-core";
 import { GroupsService } from "../services";
+import { z } from "zod";
 
 class GroupsController {
+  create: RequestHandler = async (req, res) => {
+    try {
+      const { id_event } = req.params;
+      const createGroupSchema = z.object({
+        name: z.string().min(1),
+      });
+
+      const body = createGroupSchema.safeParse(req.body);
+
+      if (!body.success) return res.json({ error: body.error.issues });
+
+      const group = await GroupsService.create({
+        id_event: Number(id_event),
+        name: body.data.name,
+      });
+      res.status(201).json({ EventGroup: group });
+    } catch (error: any) {
+      res.json(error.message);
+    }
+  };
+
   getAll: RequestHandler = async (req, res) => {
     try {
       const { id_event } = req.params;
@@ -16,11 +38,45 @@ class GroupsController {
   getGroup: RequestHandler = async (req, res) => {
     try {
       const { id, id_event } = req.params;
-      const eventGroup = await GroupsService.getOne({
+      const result = await GroupsService.getOne({
         id: Number(id),
         id_event: !isNaN(Number(id_event)) ? Number(id_event) : undefined,
       });
-      res.json(eventGroup);
+      res.json(result);
+    } catch (error: any) {
+      res.json(error.message);
+    }
+  };
+
+  update: RequestHandler = async (req, res) => {
+    try {
+      const { id, id_event } = req.params;
+      const updateGroupSchema = z.object({
+        name: z.string().optional(),
+      });
+      const body = updateGroupSchema.safeParse(req.body);
+      if (!body.success) return res.json({ error: body.error.issues });
+      const result = await GroupsService.update(
+        {
+          id: Number(id),
+          id_event: !isNaN(Number(id_event)) ? Number(id_event) : undefined,
+        },
+        body.data
+      );
+      res.json({ EventGroup: result });
+    } catch (error: any) {
+      res.json(error.message);
+    }
+  };
+
+  delete: RequestHandler = async (req, res) => {
+    try {
+      const { id, id_event } = req.params;
+      const result = await GroupsService.delete({
+        id: Number(id),
+        id_event: !isNaN(Number(id_event)) ? Number(id_event) : undefined,
+      });
+      res.json({ Group: result });
     } catch (error: any) {
       res.json(error.message);
     }
