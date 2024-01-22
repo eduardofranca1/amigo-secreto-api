@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { EventsService } from "../services";
+import { EventsService, PeopleService } from "../services";
 import { z } from "zod";
 
 class EventsController {
@@ -54,14 +54,19 @@ class EventsController {
         Number(id),
         body.data
       );
-
-      if (updatedEvent.status) {
-        // fazer o sorteio
-      } else {
-        // limpar o sorteio
+      if (updatedEvent) {
+        if (updatedEvent.status) {
+          // fazer o sorteio
+          const result = await EventsService.doMatches(Number(id));
+          if (!result) {
+            return res.json({ error: "Groups impossible to raffle" });
+          }
+        } else {
+          // limpar o sorteio
+          await PeopleService.update({ id_event: Number(id) }, { matched: "" });
+        }
+        return res.json({ event: updatedEvent });
       }
-
-      res.json({ event: updatedEvent });
     } catch (error: any) {
       res.json(error.message);
     }
