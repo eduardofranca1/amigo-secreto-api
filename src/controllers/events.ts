@@ -33,7 +33,7 @@ class EventsController {
       const item = await EventsService.getOne(Number(id));
       res.json({ event: item });
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 

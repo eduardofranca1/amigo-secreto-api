@@ -1,6 +1,7 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { PeopleService } from ".";
 import { encryptMatch } from "../utils/match";
+import Exception from "../exceptions/Exception";
 
 const prisma = new PrismaClient();
 
@@ -34,7 +35,7 @@ class EventService {
           id: idEvent,
         },
       });
-      if (!item) throw new Error("Event not found");
+      if (!item) throw new Exception("Event not found", 404);
       return item;
     } catch (error: any) {
       throw error;

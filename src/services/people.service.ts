@@ -1,5 +1,6 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { GroupsService } from ".";
+import Exception from "../exceptions/Exception";
 
 const prisma = new PrismaClient();
 
@@ -48,9 +49,9 @@ class PeopleService {
   getOne = async (filters: FilterPeople) => {
     try {
       if (!filters.id && !filters.cpf)
-        throw new Error("You need to inform the ID or CPF person.");
+        throw new Exception("You need to inform the ID or CPF person.", 400);
       const result = await prisma.eventPeople.findFirst({ where: filters });
-      if (!result) throw new Error("Person not found");
+      if (!result) throw new Exception("Person not found", 404);
       return result;
     } catch (error) {
       throw error;

@@ -89,7 +89,7 @@ class PeopleController {
         });
       }
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 
