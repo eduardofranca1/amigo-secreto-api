@@ -12,7 +12,9 @@ class GroupsController {
 
       const body = createGroupSchema.safeParse(req.body);
 
-      if (!body.success) return res.json({ error: body.error.issues });
+      if (!body.success) {
+        return res.status(400).json({ error: body.error.issues });
+      }
 
       const group = await GroupsService.create({
         id_event: Number(id_event),
@@ -20,7 +22,7 @@ class GroupsController {
       });
       res.status(201).json({ EventGroup: group });
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.status).json(error.message);
     }
   };
 
@@ -31,7 +33,7 @@ class GroupsController {
       if (items) return res.json({ groups: items });
       res.json({ error: "An error has occurred" });
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.status).json(error.message);
     }
   };
 
@@ -44,7 +46,7 @@ class GroupsController {
       });
       res.json(result);
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.status).json(error.message);
     }
   };
 
@@ -55,7 +57,9 @@ class GroupsController {
         name: z.string().optional(),
       });
       const body = updateGroupSchema.safeParse(req.body);
-      if (!body.success) return res.json({ error: body.error.issues });
+      if (!body.success) {
+        return res.status(400).json({ error: body.error.issues });
+      }
       const result = await GroupsService.update(
         {
           id: Number(id),
@@ -65,7 +69,7 @@ class GroupsController {
       );
       res.json({ EventGroup: result });
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.status).json(error.message);
     }
   };
 
@@ -78,7 +82,7 @@ class GroupsController {
       });
       res.json({ Group: result });
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.status).json(error.message);
     }
   };
 }

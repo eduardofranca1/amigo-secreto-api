@@ -24,7 +24,7 @@ class EventService {
     try {
       return await prisma.event.findMany();
     } catch (error) {
-      return false;
+      throw error;
     }
   };
 

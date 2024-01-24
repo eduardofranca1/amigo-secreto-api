@@ -13,7 +13,9 @@ class PeopleController {
         cpf: z.string().transform((value) => value.replace(/\.|-/gm, "")),
       });
       const body = createPersonSchema.safeParse(req.body);
-      if (!body.success) return res.json({ error: body.error.issues });
+      if (!body.success) {
+        return res.status(400).json({ error: body.error.issues });
+      }
       const result = await PeopleService.create({
         id_event: Number(id_event),
         id_group: Number(id_group),
@@ -22,7 +24,7 @@ class PeopleController {
       });
       res.status(201).json({ person: result });
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.status).json(error.message);
     }
   };
 
@@ -35,7 +37,7 @@ class PeopleController {
       });
       res.json({ people: result });
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.status).json(error.message);
     }
   };
 
@@ -49,7 +51,7 @@ class PeopleController {
       });
       res.json(result);
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.status).json(error.message);
     }
   };
 
@@ -62,7 +64,9 @@ class PeopleController {
       });
 
       const query = searchPersonSchema.safeParse(req.query);
-      if (!query.success) return res.json({ error: query.error.issues });
+      if (!query.success) {
+        return res.status(400).json({ error: query.error.issues });
+      }
 
       const personItem = await PeopleService.getOne({
         id_event: Number(id_event),
@@ -105,7 +109,9 @@ class PeopleController {
         matched: z.string().optional(),
       });
       const body = updatePersonSchema.safeParse(req.body);
-      if (!body.success) return res.json({ error: body.error.issues });
+      if (!body.success) {
+        return res.status(400).json({ error: body.error.issues });
+      }
       const result = await PeopleService.update(
         {
           id: !isNaN(Number(id)) ? Number(id) : undefined,
@@ -122,21 +128,21 @@ class PeopleController {
         res.json(person);
       }
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.status).json(error.message);
     }
   };
 
   delete: RequestHandler = async (req, res) => {
     try {
       const { id, id_event, id_group } = req.params;
-      const result = await PeopleService.delete({
+      await PeopleService.delete({
         id: Number(id),
         id_event: !isNaN(Number(id_event)) ? Number(id_event) : undefined,
         id_group: !isNaN(Number(id_group)) ? Number(id_group) : undefined,
       });
-      res.json(result);
+      res.json("OK");
     } catch (error: any) {
-      res.json(error.message);
+      res.status(error.status).json(error.message);
     }
   };
 }

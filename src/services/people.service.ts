@@ -27,7 +27,8 @@ type PersonUpdateData = Prisma.Args<
 class PeopleService {
   create = async (data: PersonCreateData) => {
     try {
-      if (!data.id_group) throw new Error("You have to inform group id");
+      if (!data.id_group)
+        throw new Exception("You have to inform group id", 400);
       await GroupsService.getOne({
         id: data.id_group,
         id_event: data.id_event,
@@ -69,7 +70,7 @@ class PeopleService {
   delete = async (filters: DeleteFilters) => {
     try {
       const result = await prisma.eventPeople.findFirst({ where: filters });
-      if (!result) throw new Error("Person not found");
+      if (!result) throw new Exception("Person not found", 400);
       return await prisma.eventPeople.delete({ where: filters });
     } catch (error) {
       throw error;
