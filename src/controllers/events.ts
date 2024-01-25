@@ -72,7 +72,7 @@ class EventsController {
           // limpar o sorteio
           await PeopleService.update({ id_event: Number(id) }, { matched: "" });
         }
-        return res.json({ event: updatedEvent });
+        return res.status(200).json({ event: updatedEvent });
       }
     } catch (error: any) {
       res.status(error.code).json(error.message);

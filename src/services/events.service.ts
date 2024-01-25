@@ -82,7 +82,8 @@ class EventService {
       });
       if (eventItem) {
         const peopleList = await PeopleService.getAll({ id_event: id });
-        if (peopleList) {
+        if (peopleList.length > 0) {
+          // if (peopleList) {
           // lista temporária das pessoas sorteadas
           let sortedList: { id: number; match: number }[] = [];
           // lista de pessoas sorteaveis
@@ -163,7 +164,11 @@ class EventService {
         }
       }
 
-      return false;
+      throw new Exception(
+        "It was not possible to raffle with this groups/peoples",
+        400
+      );
+      // return false;
     } catch (error) {
       throw error;
     }
