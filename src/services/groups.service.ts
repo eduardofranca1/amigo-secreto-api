@@ -28,10 +28,12 @@ class GroupsService {
   };
 
   getOne = async (filters: GroupFilters) => {
-    console.log("🚀 ~ GroupsService ~ getOne= ~ filters:", filters);
     try {
       const eventGroup = await prisma.eventGroup.findFirst({ where: filters });
-      if (!eventGroup) throw new Exception("Event group not found", 404);
+      if (!eventGroup) {
+        console.log("aqui");
+        throw new Exception("Event group not found", 404);
+      }
       return eventGroup;
     } catch (error) {
       throw error;

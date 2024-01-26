@@ -24,7 +24,7 @@ class PeopleController {
       });
       res.status(201).json({ person: result });
     } catch (error: any) {
-      res.status(error.status).json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 
@@ -37,7 +37,7 @@ class PeopleController {
       });
       res.json({ people: result });
     } catch (error: any) {
-      res.status(error.status).json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 
@@ -51,7 +51,7 @@ class PeopleController {
       });
       res.json(result);
     } catch (error: any) {
-      res.status(error.status).json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 
@@ -128,7 +128,7 @@ class PeopleController {
         res.json(person);
       }
     } catch (error: any) {
-      res.status(error.status).json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 
@@ -142,7 +142,7 @@ class PeopleController {
       });
       res.json("OK");
     } catch (error: any) {
-      res.status(error.status).json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 }

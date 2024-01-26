@@ -22,7 +22,7 @@ class GroupsController {
       });
       res.status(201).json({ EventGroup: group });
     } catch (error: any) {
-      res.status(error.status).json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 
@@ -33,7 +33,7 @@ class GroupsController {
       if (items) return res.json({ groups: items });
       res.json({ error: "An error has occurred" });
     } catch (error: any) {
-      res.status(error.status).json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 
@@ -46,7 +46,7 @@ class GroupsController {
       });
       res.json(result);
     } catch (error: any) {
-      res.status(error.status).json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 
@@ -69,7 +69,7 @@ class GroupsController {
       );
       res.json({ EventGroup: result });
     } catch (error: any) {
-      res.status(error.status).json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 
@@ -82,7 +82,7 @@ class GroupsController {
       });
       res.json({ Group: result });
     } catch (error: any) {
-      res.status(error.status).json(error.message);
+      res.status(error.code).json(error.message);
     }
   };
 }
