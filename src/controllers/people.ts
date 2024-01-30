@@ -9,8 +9,11 @@ class PeopleController {
       const { id_event, id_group } = req.params;
 
       const createPersonSchema = z.object({
-        name: z.string(),
-        cpf: z.string().transform((value) => value.replace(/\.|-/gm, "")),
+        name: z.string().min(1, "Fill the name"),
+        cpf: z
+          .string()
+          .length(11, "Fill the CPF")
+          .transform((value) => value.replace(/\.|-/gm, "")),
       });
       const body = createPersonSchema.safeParse(req.body);
       if (!body.success) {
